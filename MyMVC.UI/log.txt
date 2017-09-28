@@ -1,0 +1,6 @@
+﻿MyAction2Attribute.OnActionExecuting()
+MyAction3Attribute.OnActionExecuting()
+MyAction1Attribute.OnActionExecuting()
+MyAction1Attribute.OnActionExecuted()
+MyAction3Attribute.OnActionExecuted()
+MyAction2Attribute.OnActionExecuted()
