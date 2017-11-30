@@ -86,6 +86,9 @@ namespace MyMVC.UI.MyModule
                     HttpContext.Current.Items.Add("dispatcherName", dispatcherName);
                     HttpContext.Current.Items.Add("actionName", actionName);
                     HttpContext.Current.RewritePath("~/MyMVC/MyController/" + dispatcherName + "Dispatcher.ashx");
+
+                    //得先遍历/MyMVC/MyController下的所有自定义Dispatcher类，依次注册到Container中（第一次运行时）
+                    //然后按dispatcherName来Resolve得到Dispatcher对象，然后调用actionName对应的方法
                 }
             };
             context.LogRequest += new EventHandler(OnLogRequest);
