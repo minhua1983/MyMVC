@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using MyMVC.UI.MyMVC.MyController;
 using MyMVC.UI.MyAttribute.Route;
+using MyMVC.UI.MyContainer;
 
 namespace MyMVC.UI.MyModule
 {
@@ -30,6 +31,9 @@ namespace MyMVC.UI.MyModule
             // Below is an example of how you can handle LogRequest event and provide 
             // custom logging implementation for it
 
+            //实例化容器
+            Container container = Container.GetInstance();
+
             //*处理Dispatcher的MyRoutePrefix特性
             Assembly assembly = Assembly.GetAssembly(typeof(AbstractDispatcher));
             Type[] types = assembly.GetTypes();
@@ -37,19 +41,23 @@ namespace MyMVC.UI.MyModule
             {
                 if (t.BaseType == typeof(AbstractDispatcher))
                 {
+                    string dispatcherName = t.Name.Replace("Dispatcher", "");
                     //context.Response.Write(t.FullName + "<br />");
                     MyRoutePrefixAttribute myRoutePrefixAttribute = (MyRoutePrefixAttribute)t.GetCustomAttribute(typeof(MyRoutePrefixAttribute));
                     if (myRoutePrefixAttribute != null)
                     {
                         if (!controllerUrlDictionary.ContainsKey(myRoutePrefixAttribute.ControllrtUrl))
                         {
-                            controllerUrlDictionary.Add(myRoutePrefixAttribute.ControllrtUrl, t.Name.Replace("Dispatcher", "").ToLower());
+                            controllerUrlDictionary.Add(myRoutePrefixAttribute.ControllrtUrl, dispatcherName.ToLower());
                         }
                     }
-
+                    //注册到容器
+                    container.Register(t);
                 }
             }
             //*/
+
+            
 
             context.PreRequestHandlerExecute += (sender, e) =>
             {
@@ -83,9 +91,11 @@ namespace MyMVC.UI.MyModule
                         }
                     }
 
+                    //*
                     HttpContext.Current.Items.Add("dispatcherName", dispatcherName);
                     HttpContext.Current.Items.Add("actionName", actionName);
                     HttpContext.Current.RewritePath("~/MyMVC/MyController/" + dispatcherName + "Dispatcher.ashx");
+                    //*/
 
                     //得先遍历/MyMVC/MyController下的所有自定义Dispatcher类，依次注册到Container中（第一次运行时）
                     //然后按dispatcherName来Resolve得到Dispatcher对象，然后调用actionName对应的方法

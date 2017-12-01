@@ -61,6 +61,19 @@ namespace MyMVC.UI.MyContainer
             _dictionary.TryAdd(typeof(TInterface), typeof(TClass));
         }
 
+        /// <summary>
+        /// 将TClass类注入到容器
+        /// </summary>
+        /// <typeparam name="TClass">实现类</typeparam>
+        public void Register<TClass>() where TClass : class
+        {
+            _dictionary.TryAdd(typeof(TClass), typeof(TClass));
+        }
+
+        public void Register(Type type)
+        {
+            _dictionary.TryAdd(type, type);
+        }
         /*
         /// <summary>
         /// 以有参数构造获取T接口类型的实例（构造函数不准使用默认参数和命名参数）
@@ -123,5 +136,7 @@ namespace MyMVC.UI.MyContainer
                 return default(T);
             }
         }
+
+
     }
 }
