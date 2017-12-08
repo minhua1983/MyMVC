@@ -18,5 +18,7 @@ namespace MyMVC.UI.MyContainer
         //T Resolve<T>(params object[] parameters);
         //以无参数构造获取T接口类型的实例
         T Resolve<T>();
+        //用于动态获取对象实例
+        dynamic Resolve(Type type);
     }
 }

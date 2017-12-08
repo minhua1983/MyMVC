@@ -137,6 +137,33 @@ namespace MyMVC.UI.MyContainer
             }
         }
 
+        public dynamic Resolve(Type type)
+        {
+            try
+            {
+                Type classType;
+                //尝试读取T接口类型对应的实现类型
+                _dictionary.TryGetValue(type, out classType);
+                //获取第一个构造函数
+                ConstructorInfo constructor = classType.GetConstructors().FirstOrDefault();
 
+                //获取构造函数参数
+                //ParameterInfo[] parameters = constructor.GetParameters();
+                /*
+                List<ParameterInfo> parameterInfoList = constructor.GetParameters().ToList();
+                object[] parameters = new object[parameterInfoList.Count];
+                for (int i = 0; i < parameterInfoList.Count; i++)
+                {
+                    parameters[i] = parameterInfoList[i];
+                }
+                //*/
+                object o = constructor.Invoke(null);
+                return (dynamic)o;
+            }
+            catch
+            {
+                return default(dynamic);
+            }
+        }
     }
 }
