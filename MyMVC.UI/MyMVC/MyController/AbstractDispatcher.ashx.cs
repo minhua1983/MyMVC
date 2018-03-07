@@ -79,7 +79,7 @@ namespace MyMVC.UI.MyMVC.MyController
                                     return;
                                 }
                             }
-                            InvokrAction(mi);
+                            InvokeAction(mi);
                         }
                     }
                 }
@@ -97,14 +97,14 @@ namespace MyMVC.UI.MyMVC.MyController
                 {
                     actionName = actionUrlDictionary[actionUrl];
                     var methodInfo = methodInfoList.Where(mi => mi.Name.ToLower().Equals(actionName)).FirstOrDefault();
-                    InvokrAction(methodInfo);
+                    InvokeAction(methodInfo);
                     return true;
                 }
             }
             return false;
         }
 
-        protected void InvokrAction(MethodInfo mi)
+        protected void InvokeAction(MethodInfo mi)
         {
             //处理invoke之前的OnActionExecuting()
             var myActionAttributeList = mi.GetCustomAttributes<MyActionFilterAttribute>().ToList();
